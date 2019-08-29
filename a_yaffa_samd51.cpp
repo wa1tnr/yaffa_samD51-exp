@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include "yaffa.h"
-#include "error_codes.h"
+#include "Error_Codes.h"
 
 #include "a_yaffa_samd51.h"
 
