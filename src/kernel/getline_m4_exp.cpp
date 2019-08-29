@@ -181,8 +181,19 @@
 
         #ifdef HAS_QSPI_FLASH_DEMO // 15 Jan 2018
 
-char* workingFilename = SPI_FlashROM_FILENAME;
-char* workingDirname = SPI_FlashROM_TOPDIR;
+#define BUFFR_SIZE 256
+// 168 String tib = "";
+// const String workingFilename = SPI_FlashROM_FILENAME; // char* workingFilename = SPI_FlashROM_FILENAME;
+const char* workingFilename = SPI_FlashROM_FILENAME; // char* workingFilename = SPI_FlashROM_FILENAME;
+// const String workingDirname = SPI_FlashROM_TOPDIR; // char* workingDirname = SPI_FlashROM_TOPDIR;
+const char* workingDirname = SPI_FlashROM_TOPDIR; // char* workingDirname = SPI_FlashROM_TOPDIR;
+// String* thisfile;
+// const String* thisdir;
+// char namebuf[maxtib];
+char thisbuffer[BUFFR_SIZE];
+char* buffer;
+// char workingFilename = SPI_FlashROM_FILENAME;
+
 /*
 void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
 //	Serial.print(" Hello from setup_qspi m4 getline stuff.   ");
@@ -268,15 +279,33 @@ char* parseStr(void) {
 //	printStr(" ==> str "), printHex((cell_t) str);
 	return str;
 }
+
+// compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
-	char* path;
-	if(dirname == 0 || *dirname == 0) path = workingDirname;
+	char* path; // char* path;
+        // thisdir = &workingDirname;
+        strcpy(buffer, workingDirname);
+	if(dirname == 0 || *dirname == 0) path = buffer; // = workingDirname;
+	// else if(*dirname == '/') path = dirname;
 	else if(*dirname == '/') path = dirname;
 	else {
-		path = (char*)pHere + 128;
+		path = (char*)pHere + 128; // path = (char*)pHere + 128;
 		strcpy(path, workingDirname);
 		char* pathEnd = path + strlen(path);
 		*pathEnd++ = '/';
+/*
+
+
+/tmp/arduino_build/sketch/src/kernel/getline_m4_exp.cpp:
+
+In function 'char* fullPath(String*)':
+/tmp/arduino_build/sketch/src/kernel/getline_m4_exp.cpp:283:30:
+  error: cannot convert 'String*' to 'char*' for argument '1' to 'char* strcpy(char*, const char*)'
+   strcpy(path, workingDirname);
+
+*/
+
+
 		strcpy(pathEnd, dirname);
 	}
 //	printStr("\r\n fullPath "), printStr(path);
