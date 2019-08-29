@@ -99,7 +99,7 @@
                 #endif
 
                 Adafruit_SPIFlash flash(&flashTransport);
-                FatFileSystem fatfs;
+                FatFileSystem pythonfs; // FatFileSystem fatfs;
                 File myFile;
             #endif // #ifdef FLASH_DEVICE_GD25Q
         // #endif // #ifdef HAS_QSPI_FLASHROM_LIB
@@ -213,27 +213,27 @@ void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
 	Serial.print(" default workingFilename "); Serial.println(workingFilename);
 }
 */
-/*
 
- 54 void setup_qspiFlashROM(void) {
- 55         Serial.print("Hello from setup_qspi m4 getline stuff.   ");
- 56         Serial.print("VALID m4 getline ca1b-sesi-c1-e23  ");
- 57 
- 58         if (!flash.begin()) {
- 59                 Serial.println("E: could not find flash on QSPI bus.");
- 60                 while(1);
- 61         }
- 62         Serial.println("Found QSPI Flash.");
- 63         // Serial.println(flash.GetJEDECID(), HEX);
- 64 
- 65         if (!CURRENT_FILESYSTEM.begin(&flash)) {
- 66                 Serial.println("Failed to mount filesystem!");
- 67                 Serial.println("Was CircuitPython loaded on the board first to create the filesystem?");
- 68                 while(1);
- 69         }
- 70         Serial.println("NOV 2018: Mounted filesystem!");
- 71         }
-*/
+
+void setup_qspiFlashROM(void) {
+    Serial.print("Hello from setup_qspi m4 getline stuff.   ");
+    Serial.print("VALID m4 getline ca1b-sesi-c1-e23  ");
+
+    if (!flash.begin()) {
+            Serial.println("E: could not find flash on QSPI bus.");
+            while(1);
+    }
+    Serial.println("Found QSPI Flash.");
+    // Serial.println(flash.GetJEDECID(), HEX);
+
+    if (!CURRENT_FILESYSTEM.begin(&flash)) {
+            Serial.println("Failed to mount filesystem!");
+            Serial.println("Was CircuitPython loaded on the board first to create the filesystem?");
+            while(1);
+    }
+    Serial.println("NOV 2018: Mounted filesystem!");
+}
+
 
 
 
@@ -282,6 +282,8 @@ char* fullPath(char* dirname){
 //	printStr("\r\n fullPath "), printStr(path);
 	return path;
 }
+
+#ifdef SAM_STRING_FCNS
 void _chdir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
@@ -388,6 +390,25 @@ void _ftype(void){
 	while (readFile.available()) Serial.print((char) readFile.read());
 	readFile.close();
 }
+#else // #ifdef SAM_STRING_FCNS
+
+void _chdir(void){ // list filenames in given dir
+}
+void _dir(void){ // list filenames in given dir
+}
+void _rmdir(void){
+}
+void _mkdir(void){
+}
+void _fdel(void){
+}
+void _fload(void){
+}
+void _fsave(void){
+}
+void _ftype(void){
+}
+#endif // #ifdef SAM_STRING_FCNS
 /******************************************************************************/
 /** getLine                                                                  **/
 /**   read in a line of text ended by a Carriage Return (ASCII 13)           **/
