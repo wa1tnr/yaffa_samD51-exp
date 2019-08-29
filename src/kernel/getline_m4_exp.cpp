@@ -280,35 +280,30 @@ char* parseStr(void) {
 	return str;
 }
 
+
+char thatbuffer[BUFFR_SIZE];
+char* buffer_bb;
+const char* pathLegend = "\r\n fullPath ";
+
 // compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
 	char* path; // char* path;
-        // thisdir = &workingDirname;
         strcpy(buffer, workingDirname);
 	if(dirname == 0 || *dirname == 0) path = buffer; // = workingDirname;
-	// else if(*dirname == '/') path = dirname;
 	else if(*dirname == '/') path = dirname;
 	else {
 		path = (char*)pHere + 128; // path = (char*)pHere + 128;
 		strcpy(path, workingDirname);
 		char* pathEnd = path + strlen(path);
 		*pathEnd++ = '/';
-/*
-
-
-/tmp/arduino_build/sketch/src/kernel/getline_m4_exp.cpp:
-
-In function 'char* fullPath(String*)':
-/tmp/arduino_build/sketch/src/kernel/getline_m4_exp.cpp:283:30:
-  error: cannot convert 'String*' to 'char*' for argument '1' to 'char* strcpy(char*, const char*)'
-   strcpy(path, workingDirname);
-
-*/
-
-
 		strcpy(pathEnd, dirname);
 	}
 //	printStr("\r\n fullPath "), printStr(path);
+        strcpy(buffer_bb, pathLegend);
+  	printStr(buffer_bb);
+        strcpy(buffer_bb, path);
+  	printStr(buffer_bb);
+  	// printStr(pathLegend), printStr(buffer_bb);
 	return path;
 }
 
