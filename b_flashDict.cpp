@@ -1,10 +1,11 @@
 #include <Arduino.h>
 #include "yaffa.h"
-#include "error_codes.h"
+#include "Error_Codes.h"
 
-#include "b_flashDict.h"
 
-#include "dictionary.h"
+#include "b_flashdict.h"
+
+#include "Dictionary.h"
 #include "src/dict/new_dict_entries.h" // #include "src/dict/dict_entries.h" // 21 June 2018
 
 
@@ -193,14 +194,14 @@ const flashEntry_t flashDict[] = {
   { "endcase",      _endcase,       IMMEDIATE + COMP_ONLY },    // CAL
   { "endof",      _endof,         IMMEDIATE + COMP_ONLY },    // CAL
   { "execute",      _execute,       NORMAL },
-  { "chdir",      _chdir,       NORMAL },
-  { "dir",      _dir,       NORMAL },
-  { "rmdir",      _rmdir,       NORMAL },
-  { "mkdir",      _mkdir,       NORMAL },
-  { "fdel",      _fdel,       NORMAL },
-  { "fload",      _fload,       NORMAL },
-  { "fsave",      _fsave,       NORMAL },
-  { "ftype",      _ftype,       NORMAL },
+//{ "chdir",      _chdir,       NORMAL },
+//{ "dir",      _dir,       NORMAL },
+//{ "rmdir",      _rmdir,       NORMAL },
+//{ "mkdir",      _mkdir,       NORMAL },
+//{ "fdel",      _fdel,       NORMAL },
+//{ "fload",      _fload,       NORMAL },
+//{ "fsave",      _fsave,       NORMAL },
+//{ "ftype",      _ftype,       NORMAL },
   { "false",      _false,         NORMAL },
   { "fgBlack",      _fgBlack,       NORMAL },
   { "fgBlue",     _fgBlue,        NORMAL },
