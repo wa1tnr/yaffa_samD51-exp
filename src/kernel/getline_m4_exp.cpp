@@ -58,38 +58,53 @@
 
     #include <Arduino.h> // LINE 59
     #include "../../yaffa.h" // LINE 60
-    #define CURRENT_FILESYSTEM fatfs
+    #define CURRENT_FILESYSTEM pythonfs // #define CURRENT_FILESYSTEM fatfs
     #ifdef EXT_KERN_GETLINE
         #include "getline.h" // this is the flag wanted: HAS_QSPI_FLASHROM_LIB
         #ifdef HAS_QSPI_FLASHROM_LIB // 11 Nov 2018 // NEW LINE 64
-            #warning HAS_QSPI_FLASHROM_LIB includes extra code on line 65 __getline_m4_exp.cpp__ // 11 Nov 2018 - NEW LINE 66
+//          #warning HAS_QSPI_FLASHROM_LIB includes extra code on line 65 __getline_m4_exp.cpp__ // 11 Nov 2018 - NEW LINE 66
             #define FLASH_DEVICE_GD25Q
     // ref  #ifdef FLASH_DEVICE_GD25Q
+
+            #ifdef FLASH_DEVICE_GD25Q
+                #include <SPI.h>
+                #include <SdFat.h>
+                #include <Adafruit_SPIFlash.h>
 /*
-    20      #ifdef FLASH_DEVICE_GD25Q
-    21	                #include <SPI.h>
-    22	                #include <SdFat.h>
-    23	                #include <Adafruit_SPIFlash.h>
-    25	                #if defined(__SAMD51__) || defined(NRF52840_XXAA)
-    26	                    Adafruit_FlashTransport_QSPI flashTransport(PIN_QSPI_SCK,
-    27	                      PIN_QSPI_CS, PIN_QSPI_IO0, PIN_QSPI_IO1, PIN_QSPI_IO2,
-    28	                        PIN_QSPI_IO3);
-    29	                #else
-    30	                    #if (SPI_INTERFACES_COUNT == 1)
-    31	                        Adafruit_FlashTransport_SPI flashTransport(SS, &SPI);
-    32	                    #else
-    33	                        Adafruit_FlashTransport_SPI flashTransport(SS1, &SPI1);
-    34	                    #endif
-    35	                #endif
-    36
-    37	                Adafruit_SPIFlash flash(&flashTransport);
-    38	                FatFileSystem fatfs;
-    39	                File myFile;
-    40	            #endif // #ifdef FLASH_DEVICE_GD25Q
-    41	        #endif // #ifdef HAS_QSPI_FLASHROM_LIB
-    42	// END.
+   Adafruit.com, hathach, Dean Miller, Tony DiCola, Limor Fried:
+       $ ~/Arduino/libraries/Adafruit_SPIFlash/examples/SdFat_full_usage/SdFat_full_usage.ino#L33
+       https://github.com/adafruit/Adafruit_SPIFlash
+       https://github.com/adafruit/Adafruit_SPIFlash/blob/master/examples/SdFat_full_usage/SdFat_full_usage.ino#L33
+       https://github.com/adafruit/Adafruit_SPIFlash/blob/master/src/Adafruit_FlashTransport.h
+       name=Adafruit SPIFlash
+       version=3.1.1
+
+       * The MIT License (MIT)
+       *
+       * Copyright (c) 2019 hathach for Adafruit Industries
+
+// local: Thu Aug 29 20:54:33 UTC 2019
 */
-                //#define FLASH_TYPE     SPIFLASHTYPE_W25Q16BV  // Flash chip type. // NEW LINE 71
+
+                #if defined(__SAMD51__) || defined(NRF52840_XXAA)
+                    Adafruit_FlashTransport_QSPI flashTransport(PIN_QSPI_SCK,
+                      PIN_QSPI_CS, PIN_QSPI_IO0, PIN_QSPI_IO1, PIN_QSPI_IO2,
+                        PIN_QSPI_IO3);
+                #else
+                    #if (SPI_INTERFACES_COUNT == 1)
+                        Adafruit_FlashTransport_SPI flashTransport(SS, &SPI);
+                    #else
+                        Adafruit_FlashTransport_SPI flashTransport(SS1, &SPI1);
+                    #endif
+                #endif
+
+                Adafruit_SPIFlash flash(&flashTransport);
+                FatFileSystem fatfs;
+                File myFile;
+            #endif // #ifdef FLASH_DEVICE_GD25Q
+        // #endif // #ifdef HAS_QSPI_FLASHROM_LIB
+
+                // #define FLASH_TYPE     SPIFLASHTYPE_W25Q16BV  // Flash chip type. // NEW LINE 71
     // rescind  #define FLASH_TYPE     SPIFLASHTYPE_W25Q128JV  // Flash chip type. //Albert 20190430
     // rescind  #include <Adafruit_SPIFlash_FatFs.h> // NEW LINE 69
     // rescind  #include "Adafruit_QSPI_GD25Q.h"
@@ -101,55 +116,60 @@
 // rescind      Adafruit_M0_Express_CircuitPython pythonfs(flash);
 
 // TEMP: LINE 79
-
-
 // LINE 77 // TEMP: LINE 80
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // LINE 100
-
-
-
-
-
-
-
 // LINE 108
 // ------------------------ this was SPI   not    SPI1   ------ when did this change?
 // LINE 110
 
-
-
 // Adafruit_SPIFlash flash(FLASH_SS, &FLASH_SPI_PORT); // Adafruit_QSPI_GD25Q flash;
-
 // Adafruit_W25Q16BV_FatFs fatfs(flash); // Adafruit_M0_Express_CircuitPython pythonfs(flash);
-
-#endif // 15 Jan 2018
+// COMMENTED // #endif // 15 Jan 2018
 /* these two levels cpp still open 11 Nov 21:53 UTC:
-#ifdef HAS_EXP_MFOUR_QSPI_FLASH
-    #ifdef EXT_KERN_GETLINE
+// #ifdef HAS_EXP_MFOUR_QSPI_FLASH
+    // #ifdef EXT_KERN_GETLINE
         #directive
 */
+// #endif //  kludge wa1tnr 29 aug 21:14z
+
+/*
+// #ifdef HAS_EXP_MFOUR_QSPI_FLASH
+//    #define SPI_FlashROM_FILENAME "/forth/ascii_xfer_a001.txt"
+//    #define SPI_FlashROM_TOPDIR "/forth"
+//    #include <Arduino.h> // LINE 59
+//    #include "../../yaffa.h" // LINE 60
+//    #define CURRENT_FILESYSTEM pythonfs // #define CURRENT_FILESYSTEM fatfs
+//    #ifdef EXT_KERN_GETLINE
+//        #include "getline.h" // this is the flag wanted: HAS_QSPI_FLASHROM_LIB
+//        #ifdef HAS_QSPI_FLASHROM_LIB // 11 Nov 2018 // NEW LINE 64
+//            #warning HAS_QSPI_FLASHROM_LIB includes extra code on line 65 __getline_m4_exp.cpp__ // 11 Nov 2018 - NEW LINE 66
+//            #define FLASH_DEVICE_GD25Q
+//            #ifdef FLASH_DEVICE_GD25Q
+//                #include <SPI.h>
+//                #include <SdFat.h>
+//                #include <Adafruit_SPIFlash.h>
+//                #if defined(__SAMD51__) || defined(NRF52840_XXAA)
+//                #else
+//                    #if (SPI_INTERFACES_COUNT == 1)
+//                    #else
+//                    #endif
+//                #endif
+//            #endif // #ifdef FLASH_DEVICE_GD25Q
+//        #endif // #ifdef HAS_QSPI_FLASHROM_LIB
+// COMMENTED // #endif // EXT_KERN_GETLINE test
+// COMMENTED // #endif // HAS_EXP_MFOUR test
+
+*/
+// #endif // kludge 29 aug
+// #endif // test for unclosed #ifdef
+// #endif // test for unclosed #ifdef
+
+// #ifdef HAS_EXP_MFOUR_QSPI_FLASH
+//    #ifdef EXT_KERN_GETLINE
+
+// #endif // test for unclosed #ifdef
+/******************************************************************************/
+/** getDLKey                                                                 **/
 /******************************************************************************/
 /** getDLKey                                                                 **/
 /**   waits for the next valid key to be entered in download mode (DL)       **/
@@ -163,6 +183,7 @@
 
 char* workingFilename = SPI_FlashROM_FILENAME;
 char* workingDirname = SPI_FlashROM_TOPDIR;
+/*
 void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
 //	Serial.print(" Hello from setup_qspi m4 getline stuff.   ");
 
@@ -172,7 +193,7 @@ void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
     }
     Serial.print(" HAS_EXP_MFOUR_QSPI_FLASH "); Serial.println(HAS_EXP_MFOUR_QSPI_FLASH);
     Serial.print(" HAS_QSPI_FLASH_DEMO "); Serial.println(HAS_QSPI_FLASH_DEMO);
-	Serial.print(" FLASH_TYPE 0x"); Serial.println(FLASH_TYPE, HEX);
+//  Serial.print(" FLASH_TYPE 0x"); Serial.println(FLASH_TYPE, HEX);
     Serial.print(" Flash chip JEDEC ID: 0x"); Serial.println(flash.GetJEDECID(), HEX);
 //  Serial.println(" Found QSPI Flash.");
     // Serial.print("Flash chip JEDEC ID: 0x");
@@ -191,6 +212,36 @@ void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
 	Serial.print(" default workingDirname "); Serial.println(workingDirname);
 	Serial.print(" default workingFilename "); Serial.println(workingFilename);
 }
+*/
+/*
+
+ 54 void setup_qspiFlashROM(void) {
+ 55         Serial.print("Hello from setup_qspi m4 getline stuff.   ");
+ 56         Serial.print("VALID m4 getline ca1b-sesi-c1-e23  ");
+ 57 
+ 58         if (!flash.begin()) {
+ 59                 Serial.println("E: could not find flash on QSPI bus.");
+ 60                 while(1);
+ 61         }
+ 62         Serial.println("Found QSPI Flash.");
+ 63         // Serial.println(flash.GetJEDECID(), HEX);
+ 64 
+ 65         if (!CURRENT_FILESYSTEM.begin(&flash)) {
+ 66                 Serial.println("Failed to mount filesystem!");
+ 67                 Serial.println("Was CircuitPython loaded on the board first to create the filesystem?");
+ 68                 while(1);
+ 69         }
+ 70         Serial.println("NOV 2018: Mounted filesystem!");
+ 71         }
+*/
+
+
+
+
+
+
+
+
         #endif // 15 Jan 2018
 
 extern void printStr(char*);
@@ -538,7 +589,7 @@ if (silentReading) {
   return (count);
 }
 
-        #endif
+        #endif // LINE 556 and LIVE CODE 29 August 2019
     #endif // #ifdef EXT_KERN_GETLINE
 
 
