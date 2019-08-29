@@ -5,7 +5,7 @@
 #ifdef HAS_EXP_MFOUR_QSPI_FLASH
 
 
-
+// void noooop(void) { }
 
 
 
@@ -184,11 +184,6 @@
 #define BUFFR_SIZE 256
 const char* workingFilename = SPI_FlashROM_FILENAME;
 const char* workingDirname = SPI_FlashROM_TOPDIR;
-char thisbuffer[BUFFR_SIZE];
-char* buffer;
-char thatbuffer[BUFFR_SIZE];
-char* buffer_bb;
-const char* pathLegend = "\r\n fullPath ";
 
 /*
 void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
@@ -279,12 +274,17 @@ char* parseStr(void) {
 
 // compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
+        const char* pathLegend = "\r\n fullPath ";
 	char* path; // char* path;
+        char thisbuffer[BUFFR_SIZE];
+        char thatbuffer[BUFFR_SIZE];
+        char* buffer;
+        char* buffer_bb;
         strcpy(buffer, workingDirname);
-	if(dirname == 0 || *dirname == 0) path = buffer; // = workingDirname;
+	if(dirname == 0 || *dirname == 0) path = buffer;
 	else if(*dirname == '/') path = dirname;
 	else {
-		path = (char*)pHere + 128; // path = (char*)pHere + 128;
+		path = (char*)pHere + 128;
 		strcpy(path, workingDirname);
 		char* pathEnd = path + strlen(path);
 		*pathEnd++ = '/';
@@ -295,75 +295,80 @@ char* fullPath(char* dirname){
   	printStr(buffer_bb);
         strcpy(buffer_bb, path);
   	printStr(buffer_bb);
-  	// printStr(pathLegend), printStr(buffer_bb);
 	return path;
 }
 
-#ifdef SAM_STRING_FCNS
 void _chdir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
+/*
 		printStr("\r\n directory ");
 		printStr(path);
 		printStr(" not exist");
 		_throw("not exist");
+*/
 		return;
 	}
 	workingDirname = path;
+/*
 	printStr("\r\n working directory "); printStr(path);
+*/
 }
+
 void _dir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
 		Serial.print("\r\n directory ");
 		Serial.print(path);
 		Serial.println(" not exist");
-		_throw("not exist");
+//              _throw("not exist");
 		return;
 	}
 	Serial.print("\r\n directory ");
 	Serial.print(path);
 	File testDir = pythonfs.open(path);
 	if (!testDir.isDirectory()) {
-    	_throw("not a dir");
+//          _throw("not a dir");
 		return;
 	}
 	File child = testDir.openNextFile();
 	int i = 0;
 	while( child ) {
-	    printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
-	    if (child.isDirectory()) printStr(" (dir)");
+//          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
+//          if (child.isDirectory()) printStr(" (dir)");
 	    child = testDir.openNextFile();
 	}
-	if(! i) printStr(" empty");
+//      if(! i) printStr(" empty");
 }
 void _rmdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
-		_throw("dir not exist");
+//          _throw("dir not exist");
 		return;
 	}
 	if (!pythonfs.rmdir(path)) {
-	  _throw("failed to remove dir");
+//          _throw("failed to remove dir");
 	  return;
 	}
-	printStr("\r\n Removed dir "); printStr(path);
+//      printStr("\r\n Removed dir "); printStr(path);
 }
 void _mkdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
 		if (!pythonfs.mkdir(path)) {
-		  _throw("failed to create dir");
+                  // _throw("failed to create dir");
 		  return;
 		}
-		printStr("\r\n Created dir ");
-	} else printStr("\r\n Already had dir ");
+//              printStr("\r\n Created dir ");
+	} else // noooop();
+//      } else printStr("\r\n Already had dir ");
 	printStr(path);
 }
+
 void _fdel(void){
 	workingFilename = fullPath( parseStr() );
 	if (!pythonfs.exists(workingFilename)) {
-		_throw( "file not exist" ); return;
+//          _throw( "file not exist" ); return;
 	}
 	_remove();
 }
@@ -373,7 +378,7 @@ void _fload(void){
 		Serial.print("file ");
 		Serial.print(filename);
 		Serial.println(" not found");
-		_throw(" not found");
+//               _throw(" not found");
 		return;
 	}
 	workingFilename = filename;
@@ -384,7 +389,7 @@ void _fsave(void){
 	if (!pythonfs.exists(workingFilename)) {
 		File writeFile = pythonfs.open(workingFilename, FILE_WRITE);
 		if (!writeFile){
-			_throw( "cannot create empty file" );
+//                      _throw( "cannot create empty file" );
 			return;
 		}
 		writeFile.println();
@@ -398,7 +403,7 @@ void _ftype(void){
 		Serial.print("file ");
 		Serial.print(filename);
 		Serial.println(" not found");
-		_throw(" not found");
+//              _throw(" not found");
 		return;
 	}
 	File readFile = pythonfs.open(filename, FILE_READ);
@@ -406,24 +411,21 @@ void _ftype(void){
 	while (readFile.available()) Serial.print((char) readFile.read());
 	readFile.close();
 }
+#ifdef SAM_STRING_FCNS
+// cleared
 #else // #ifdef SAM_STRING_FCNS
 
-void _chdir(void){ // list filenames in given dir
-}
-void _dir(void){ // list filenames in given dir
-}
-void _rmdir(void){
-}
-void _mkdir(void){
-}
-void _fdel(void){
-}
-void _fload(void){
-}
-void _fsave(void){
-}
-void _ftype(void){
-}
+#ifdef SAM_STRING_FCNS
+void _chdir(void){ }
+void _dir(void){ }
+void _rmdir(void){ }
+void _mkdir(void){ }
+void _fdel(void){ }
+void _fload(void){ }
+void _fsave(void){ }
+void _ftype(void){ }
+// cleared:
+#endif // #ifdef SAM_STRING_FCNS
 #endif // #ifdef SAM_STRING_FCNS
 /******************************************************************************/
 /** getLine                                                                  **/
