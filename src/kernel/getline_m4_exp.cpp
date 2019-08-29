@@ -58,26 +58,52 @@
 
     #include <Arduino.h> // LINE 59
     #include "../../yaffa.h" // LINE 60
-
+    #define CURRENT_FILESYSTEM fatfs
     #ifdef EXT_KERN_GETLINE
         #include "getline.h" // this is the flag wanted: HAS_QSPI_FLASHROM_LIB
         #ifdef HAS_QSPI_FLASHROM_LIB // 11 Nov 2018 // NEW LINE 64
             #warning HAS_QSPI_FLASHROM_LIB includes extra code on line 65 __getline_m4_exp.cpp__ // 11 Nov 2018 - NEW LINE 66
             #define FLASH_DEVICE_GD25Q
-            #ifdef FLASH_DEVICE_GD25Q
+    // ref  #ifdef FLASH_DEVICE_GD25Q
+/*
+    20      #ifdef FLASH_DEVICE_GD25Q
+    21	                #include <SPI.h>
+    22	                #include <SdFat.h>
+    23	                #include <Adafruit_SPIFlash.h>
+    25	                #if defined(__SAMD51__) || defined(NRF52840_XXAA)
+    26	                    Adafruit_FlashTransport_QSPI flashTransport(PIN_QSPI_SCK,
+    27	                      PIN_QSPI_CS, PIN_QSPI_IO0, PIN_QSPI_IO1, PIN_QSPI_IO2,
+    28	                        PIN_QSPI_IO3);
+    29	                #else
+    30	                    #if (SPI_INTERFACES_COUNT == 1)
+    31	                        Adafruit_FlashTransport_SPI flashTransport(SS, &SPI);
+    32	                    #else
+    33	                        Adafruit_FlashTransport_SPI flashTransport(SS1, &SPI1);
+    34	                    #endif
+    35	                #endif
+    36
+    37	                Adafruit_SPIFlash flash(&flashTransport);
+    38	                FatFileSystem fatfs;
+    39	                File myFile;
+    40	            #endif // #ifdef FLASH_DEVICE_GD25Q
+    41	        #endif // #ifdef HAS_QSPI_FLASHROM_LIB
+    42	// END.
+*/
                 //#define FLASH_TYPE     SPIFLASHTYPE_W25Q16BV  // Flash chip type. // NEW LINE 71
-                #define FLASH_TYPE     SPIFLASHTYPE_W25Q128JV  // Flash chip type. //Albert 20190430
-                #include <Adafruit_SPIFlash_FatFs.h> // NEW LINE 69
-                #include "Adafruit_QSPI_GD25Q.h"
-                #define FLASH_TYPE     SPIFLASHTYPE_W25Q16BV  // Flash chip type. // NEW LINE 71
+    // rescind  #define FLASH_TYPE     SPIFLASHTYPE_W25Q128JV  // Flash chip type. //Albert 20190430
+    // rescind  #include <Adafruit_SPIFlash_FatFs.h> // NEW LINE 69
+    // rescind  #include "Adafruit_QSPI_GD25Q.h"
+    // rescind  #define FLASH_TYPE     SPIFLASHTYPE_W25Q16BV  // Flash chip type. // NEW LINE 71
  
                 //Adafruit_QSPI_GD25Q flash;
 //                Adafruit_QSPI_GD25Q flash;
-                Adafruit_QSPI_Generic flash; // Albert 20190429
-                Adafruit_M0_Express_CircuitPython pythonfs(flash);
+// rescind      Adafruit_QSPI_Generic flash; // Albert 20190429
+// rescind      Adafruit_M0_Express_CircuitPython pythonfs(flash);
+
+// TEMP: LINE 79
 
 
-// LINE 77
+// LINE 77 // TEMP: LINE 80
 
 
 
