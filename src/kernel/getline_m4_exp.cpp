@@ -182,17 +182,13 @@
         #ifdef HAS_QSPI_FLASH_DEMO // 15 Jan 2018
 
 #define BUFFR_SIZE 256
-// 168 String tib = "";
-// const String workingFilename = SPI_FlashROM_FILENAME; // char* workingFilename = SPI_FlashROM_FILENAME;
-const char* workingFilename = SPI_FlashROM_FILENAME; // char* workingFilename = SPI_FlashROM_FILENAME;
-// const String workingDirname = SPI_FlashROM_TOPDIR; // char* workingDirname = SPI_FlashROM_TOPDIR;
-const char* workingDirname = SPI_FlashROM_TOPDIR; // char* workingDirname = SPI_FlashROM_TOPDIR;
-// String* thisfile;
-// const String* thisdir;
-// char namebuf[maxtib];
+const char* workingFilename = SPI_FlashROM_FILENAME;
+const char* workingDirname = SPI_FlashROM_TOPDIR;
 char thisbuffer[BUFFR_SIZE];
 char* buffer;
-// char workingFilename = SPI_FlashROM_FILENAME;
+char thatbuffer[BUFFR_SIZE];
+char* buffer_bb;
+const char* pathLegend = "\r\n fullPath ";
 
 /*
 void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
@@ -280,10 +276,6 @@ char* parseStr(void) {
 	return str;
 }
 
-
-char thatbuffer[BUFFR_SIZE];
-char* buffer_bb;
-const char* pathLegend = "\r\n fullPath ";
 
 // compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
