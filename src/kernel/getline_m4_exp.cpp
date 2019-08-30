@@ -218,8 +218,9 @@ void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
 
 
 void setup_qspiFlashROM(void) {
-    Serial.print("Hello from setup_qspi m4 getline stuff.   ");
+    Serial.println("Hello from setup_qspi m4 getline stuff.   ");
     Serial.print("VALID m4 getline ca3f-sesi-c3-f17  ");
+    Serial.println("Fri Aug 30 04:27:57 UTC 2019");
 
     if (!flash.begin()) {
             Serial.println("E: could not find flash on QSPI bus.");
@@ -356,7 +357,7 @@ void _dir(void){ // list filenames in given dir
          // strcpy(buffer, myChild.name());
             myChild.getName(filename, sizeof(filename));
             strcpy(buffer, (char*) filename);
-            printStr(buffer);
+            // debug only: // printStr(buffer);
 
 // -----------------------------------------------------------
 // -----------------------------------------------------------
@@ -391,7 +392,8 @@ void _dir(void){ // list filenames in given dir
 // does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
             // Serial.println(buffer); // Serial.println(" .. get a load of that!");
-            delay(5000); 
+
+            // delay(500);  // runaway train catcher
             printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer); 
             if (myChild.isDirectory()) printStr(" (dir)"); // and this, too ;)
 	    myChild = testDir.openNextFile(); // this caused infinite enumeration ;)
