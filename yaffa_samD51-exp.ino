@@ -1,34 +1,9 @@
 #define HAS_QSPI_FLASH_DEMO
+// Fri Aug 30 04:32:56 UTC 2019
+// On branch develop
 
 // Fri Aug 30 04:04:22 UTC 2019
 // On branch tnr-aa-dev-cc-
-
-// Fri Aug 30 02:56:25 UTC 2019
-// On branch tnr-aa-dev-bb-
-
-/*
-branches:
-
-  master
-  orig_master
-  tnr-aa
-  tnr-aa-dev-aa-
-* tnr-aa-dev-bb-
-
-*/
-
-
-/*
-Fri Aug 30 01:23:14 UTC 2019
-On branch tnr-aa-dev-aa-
-
-  master
-  orig_master
-  tnr-aa
-* tnr-aa-dev-aa-
-
-*/
-// Fri Aug 30 00:25:52 UTC 2019
 
 // Thu Aug 29 18:57:37 UTC 2019
 // git clone https://github.com/samsuanchen/yaffa_samD51.git
