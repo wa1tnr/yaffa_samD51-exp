@@ -372,6 +372,12 @@ void _dir(void){ // list filenames in given dir
 // does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
 
+
+            Serial.println("DEBUG: the buffer actually says this! to wit: ");
+            Serial.println(buffer);
+            Serial.println(" .. get a load of that!");
+
+
             printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
 
             if (child.isDirectory()) printStr(" (dir)");
