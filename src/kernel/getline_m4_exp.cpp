@@ -260,27 +260,37 @@ extern void _load();
 extern void _remove();
 
 char* parseStr(void) {
+        // cruft // Serial.println("parseStr() itself: ");
 	_bl(); _word(); cell_t n = dStack_pop();
 	cell_t* cStr = (cell_t*) n;
 	char* str = 0;
 	if(cStr) {
 		n = *cStr++; str = (char*) cStr;
-	//	printStr("\r\n "), Serial.print(n), printStr("-byte \""), printStr(str), printStr("\"");
+	  	printStr("\r\n "), Serial.print(n), printStr("-byte \""), printStr(str), printStr("\"");
 	}
-//	printStr(" ==> str "), printHex((cell_t) str);
+  	printStr(" ==> str "), printHex((cell_t) str);
+        // cruft // Serial.println("parseStr() returns str to the caller: ");
+        Serial.print("str is: ");
+        Serial.println(str);
 	return str;
 }
 
 
 // compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
+        Serial.println("DEBUG: fullPath(char* dirname) .. begins here: ");
         const char* pathLegend = "\r\n fullPath ";
+        Serial.print("DEBUG: pathLegend is "); Serial.println(pathLegend);
 	char* path; // char* path;
         char thisbuffer[BUFFR_SIZE];
         char thatbuffer[BUFFR_SIZE];
         char* buffer;
         char* buffer_bb;
+        buffer = thisbuffer;
+        Serial.println("DEBUG: just before strcpy: ");
         strcpy(buffer, workingDirname);
+        Serial.println("DEBUG: << just after strcpy ");
+        // Serial.print("DEBUG: buffer now holds: "); Serial.println(buffer);
 	if(dirname == 0 || *dirname == 0) path = buffer;
 	else if(*dirname == '/') path = dirname;
 	else {
@@ -290,7 +300,7 @@ char* fullPath(char* dirname){
 		*pathEnd++ = '/';
 		strcpy(pathEnd, dirname);
 	}
-//	printStr("\r\n fullPath "), printStr(path);
+  	printStr("\r\n fullPath "), printStr(path);
         strcpy(buffer_bb, pathLegend);
   	printStr(buffer_bb);
         strcpy(buffer_bb, path);
@@ -301,74 +311,91 @@ char* fullPath(char* dirname){
 void _chdir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
-/*
+
 		printStr("\r\n directory ");
 		printStr(path);
 		printStr(" not exist");
 		_throw("not exist");
-*/
 		return;
 	}
 	workingDirname = path;
-/*
+
 	printStr("\r\n working directory "); printStr(path);
-*/
+
 }
 
+// _dir() calls parseStr which prints " ==> str " and an address
+
 void _dir(void){ // list filenames in given dir
+
+	// Serial.print("\r\n DEBUG: _dir() entry point: ");
+        // result:  'dir' by itself prints the above DEBUG statement.
+
+	Serial.print("\r\n DEBUG: path assigned incl fullPath and parseStr(): ");
 	char* path = fullPath( parseStr() );
+
+        // - - - -   Nothing below gets executed - - -
+
+	Serial.print("\r\n DEBUG: a test to see if the path exists is performed: ");
 	if (!pythonfs.exists(path)) {
 		Serial.print("\r\n directory ");
 		Serial.print(path);
 		Serial.println(" not exist");
-//              _throw("not exist");
+                _throw("not exist");
 		return;
 	}
+	Serial.print("\r\n DEBUG: if the path didn't exist THIS message does not appear. ");
+
 	Serial.print("\r\n directory ");
 	Serial.print(path);
 	File testDir = pythonfs.open(path);
 	if (!testDir.isDirectory()) {
-//          _throw("not a dir");
+            _throw("not a dir");
 		return;
 	}
 	File child = testDir.openNextFile();
 	int i = 0;
 	while( child ) {
+
+// does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
-//          if (child.isDirectory()) printStr(" (dir)");
+
+            if (child.isDirectory()) printStr(" (dir)");
 	    child = testDir.openNextFile();
 	}
-//      if(! i) printStr(" empty");
+        if(! i) printStr(" empty");
 }
 void _rmdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
-//          _throw("dir not exist");
+            _throw("dir not exist");
 		return;
 	}
 	if (!pythonfs.rmdir(path)) {
-//          _throw("failed to remove dir");
+            _throw("failed to remove dir");
 	  return;
 	}
-//      printStr("\r\n Removed dir "); printStr(path);
+        printStr("\r\n Removed dir "); printStr(path);
 }
 void _mkdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
 		if (!pythonfs.mkdir(path)) {
-                  // _throw("failed to create dir");
+                     _throw("failed to create dir");
 		  return;
 		}
-//              printStr("\r\n Created dir ");
-	} else // noooop();
-//      } else printStr("\r\n Already had dir ");
+                printStr("\r\n Created dir ");
+
+// may be a mistake in uncommenting previously commented code:
+        } else printStr("\r\n Already had dir ");
+//      else // noooop();
 	printStr(path);
 }
 
 void _fdel(void){
 	workingFilename = fullPath( parseStr() );
 	if (!pythonfs.exists(workingFilename)) {
-//          _throw( "file not exist" ); return;
+            _throw( "file not exist" ); return;
 	}
 	_remove();
 }
@@ -378,7 +405,7 @@ void _fload(void){
 		Serial.print("file ");
 		Serial.print(filename);
 		Serial.println(" not found");
-//               _throw(" not found");
+                 _throw(" not found");
 		return;
 	}
 	workingFilename = filename;
@@ -389,7 +416,7 @@ void _fsave(void){
 	if (!pythonfs.exists(workingFilename)) {
 		File writeFile = pythonfs.open(workingFilename, FILE_WRITE);
 		if (!writeFile){
-//                      _throw( "cannot create empty file" );
+                        _throw( "cannot create empty file" );
 			return;
 		}
 		writeFile.println();
@@ -403,7 +430,7 @@ void _ftype(void){
 		Serial.print("file ");
 		Serial.print(filename);
 		Serial.println(" not found");
-//              _throw(" not found");
+                _throw(" not found");
 		return;
 	}
 	File readFile = pythonfs.open(filename, FILE_READ);
@@ -412,21 +439,10 @@ void _ftype(void){
 	readFile.close();
 }
 #ifdef SAM_STRING_FCNS
-// cleared
-#else // #ifdef SAM_STRING_FCNS
-
-#ifdef SAM_STRING_FCNS
-void _chdir(void){ }
-void _dir(void){ }
-void _rmdir(void){ }
-void _mkdir(void){ }
-void _fdel(void){ }
-void _fload(void){ }
-void _fsave(void){ }
-void _ftype(void){ }
-// cleared:
-#endif // #ifdef SAM_STRING_FCNS
-#endif // #ifdef SAM_STRING_FCNS
+void _chdir(void){ } void _dir(void){ } void _rmdir(void){ }
+void _mkdir(void){ } void _fdel(void){ } void _fload(void){ }
+void _fsave(void){ } void _ftype(void){ }
+#endif
 /******************************************************************************/
 /** getLine                                                                  **/
 /**   read in a line of text ended by a Carriage Return (ASCII 13)           **/
