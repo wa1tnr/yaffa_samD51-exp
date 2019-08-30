@@ -354,7 +354,7 @@ void _dir(void){ // list filenames in given dir
 	while( myChild ) {
             char filename[64];
          // strcpy(buffer, myChild.name());
-            child.getName(filename, sizeof(filename));
+            myChild.getName(filename, sizeof(filename));
             strcpy(buffer, (char*) filename);
             printStr(buffer);
 
@@ -383,7 +383,6 @@ void _dir(void){ // list filenames in given dir
  362             printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
  363             Serial.println(" BUG - after it ");
 #endif // NEVER_DEFINED
-
 // -----------------------------------------------------------
 // -----------------------------------------------------------
 // -------------------   bug   -------------------------------
@@ -391,18 +390,11 @@ void _dir(void){ // list filenames in given dir
 // -----------------------------------------------------------
 // does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
-
-
-            Serial.println("DEBUG: the buffer actually says this! to wit: ");
-            Serial.println(buffer);
-            Serial.println(" .. get a load of that!");
-            delay(5000);
-
-
-            printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
-
-            if (child.isDirectory()) printStr(" (dir)");
-	    child = testDir.openNextFile();
+            // Serial.println(buffer); // Serial.println(" .. get a load of that!");
+            delay(5000); 
+            printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer); 
+            if (myChild.isDirectory()) printStr(" (dir)"); // and this, too ;)
+	    myChild = testDir.openNextFile(); // this caused infinite enumeration ;)
 	}
         if(! i) printStr(" empty");
 }
