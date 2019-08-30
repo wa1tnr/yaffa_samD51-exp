@@ -1,4 +1,20 @@
 #define HAS_QSPI_FLASH_DEMO
+
+// Fri Aug 30 02:56:25 UTC 2019
+// On branch tnr-aa-dev-bb-
+
+/*
+branches:
+
+  master
+  orig_master
+  tnr-aa
+  tnr-aa-dev-aa-
+* tnr-aa-dev-bb-
+
+*/
+
+
 /*
 Fri Aug 30 01:23:14 UTC 2019
 On branch tnr-aa-dev-aa-
