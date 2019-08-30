@@ -316,6 +316,9 @@ void _chdir(void){ // list filenames in given dir
 
 void _dir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
+        char thisbuffer[BUFFR_SIZE];
+        char* buffer;
+        buffer = thisbuffer;
 	if (!pythonfs.exists(path)) {
 		Serial.print("\r\n directory ");
 		Serial.print(path);
@@ -331,11 +334,20 @@ void _dir(void){ // list filenames in given dir
 		return;
 	}
 	File child = testDir.openNextFile();
+        File myChild = (File) child;
 	int i = 0;
 	while( child ) {
+            strcpy(buffer, myChild.name());
 
 // -----------------------------------------------------------
 #ifdef NEVER_DEFINED
+
+ 317 void _dir(void){ // list filenames in given dir
+ 318         char* path = fullPath( parseStr() );
+ 319         char thisbuffer[BUFFR_SIZE];
+ 320         char* buffer;
+ 321         buffer = thisbuffer;
+
  336         File child = testDir.openNextFile();
  337         File myChild = (File) child;
  338         int i = 0;
@@ -360,11 +372,14 @@ void _dir(void){ // list filenames in given dir
 // does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
 
+            printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
+
             if (child.isDirectory()) printStr(" (dir)");
 	    child = testDir.openNextFile();
 	}
         if(! i) printStr(" empty");
 }
+
 void _rmdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
