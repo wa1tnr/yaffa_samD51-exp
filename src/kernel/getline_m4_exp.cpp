@@ -287,12 +287,22 @@ char* fullPath(char* dirname){
         char* buffer;
         char* buffer_bb;
         buffer = thisbuffer;
+        buffer_bb = thatbuffer; // not sure what's needed for separation and when. ;)
         Serial.println("DEBUG: just before strcpy: ");
         strcpy(buffer, workingDirname);
         Serial.println("DEBUG: << just after strcpy ");
-        // Serial.print("DEBUG: buffer now holds: "); Serial.println(buffer);
+        Serial.print("DEBUG: buffer now holds: '"); Serial.print(buffer);
+        Serial.println("' in it.");
+
 	if(dirname == 0 || *dirname == 0) path = buffer;
 	else if(*dirname == '/') path = dirname;
+
+        // Serial.print("DEBUG: p0th now holds");
+        // Serial.println("any");
+
+        // Serial.print(path);
+
+        // Serial.println("' in it");
 	else {
 		path = (char*)pHere + 128;
 		strcpy(path, workingDirname);
