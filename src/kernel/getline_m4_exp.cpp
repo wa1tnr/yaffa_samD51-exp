@@ -276,11 +276,8 @@ char* parseStr(void) {
 }
 
 
-// compiles cleanly.  Untested!  29 august 2019 tnr
 char* fullPath(char* dirname){
-        Serial.println("DEBUG: fullPath(char* dirname) .. begins here: ");
         const char* pathLegend = "\r\n fullPath ";
-        Serial.print("DEBUG: pathLegend is "); Serial.println(pathLegend);
 	char* path; // char* path;
         char thisbuffer[BUFFR_SIZE];
         char thatbuffer[BUFFR_SIZE];
@@ -288,21 +285,14 @@ char* fullPath(char* dirname){
         char* buffer_bb;
         buffer = thisbuffer;
         buffer_bb = thatbuffer; // not sure what's needed for separation and when. ;)
-        Serial.println("DEBUG: just before strcpy: ");
         strcpy(buffer, workingDirname);
-        Serial.println("DEBUG: << just after strcpy ");
-        Serial.print("DEBUG: buffer now holds: '"); Serial.print(buffer);
-        Serial.println("' in it.");
+
+        // Serial.print("DEBUG: buffer now holds: '"); Serial.print(buffer);
+        // Serial.println("' in it.");
 
 	if(dirname == 0 || *dirname == 0) path = buffer;
 	else if(*dirname == '/') path = dirname;
 
-        // Serial.print("DEBUG: p0th now holds");
-        // Serial.println("any");
-
-        // Serial.print(path);
-
-        // Serial.println("' in it");
 	else {
 		path = (char*)pHere + 128;
 		strcpy(path, workingDirname);
@@ -315,6 +305,7 @@ char* fullPath(char* dirname){
   	printStr(buffer_bb);
         strcpy(buffer_bb, path);
   	printStr(buffer_bb);
+        // Serial.print("DEBUG: path is: '");
 	return path;
 }
 
@@ -387,6 +378,7 @@ void _rmdir(void){
 	}
         printStr("\r\n Removed dir "); printStr(path);
 }
+
 void _mkdir(void){
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
