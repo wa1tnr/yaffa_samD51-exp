@@ -333,12 +333,32 @@ void _dir(void){ // list filenames in given dir
             _throw("not a dir");
 		return;
 	}
+
+
+
+
+
+
+#ifdef NEVER_DEFINED_BB
+173   Serial.println("Listing children of directory /test:");
+174   File child = testDir.openNextFile();
+175   while (child) {
+176     char filename[64];
+177     child.getName(filename, sizeof(filename));
+#endif // #ifdef NEVER_DEFINED_BB
+
+
 	File child = testDir.openNextFile();
         File myChild = (File) child;
 	int i = 0;
-	while( child ) {
-            strcpy(buffer, myChild.name());
+	while( myChild ) {
+            char filename[64];
+         // strcpy(buffer, myChild.name());
+            child.getName(filename, sizeof(filename));
+            strcpy(buffer, (char*) filename);
+            printStr(buffer);
 
+// -----------------------------------------------------------
 // -----------------------------------------------------------
 #ifdef NEVER_DEFINED
 
@@ -376,6 +396,7 @@ void _dir(void){ // list filenames in given dir
             Serial.println("DEBUG: the buffer actually says this! to wit: ");
             Serial.println(buffer);
             Serial.println(" .. get a load of that!");
+            delay(5000);
 
 
             printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
