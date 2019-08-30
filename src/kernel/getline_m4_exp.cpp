@@ -335,6 +335,23 @@ void _dir(void){ // list filenames in given dir
 	while( child ) {
 
 // -----------------------------------------------------------
+#ifdef NEVER_DEFINED
+ 336         File child = testDir.openNextFile();
+ 337         File myChild = (File) child;
+ 338         int i = 0;
+ 339         while( child ) {
+ 354 // does not want to compile as-is:
+ 355             // strcpy(buffer, printStr(  myChild.name()  ));
+ 356             // fname = myChild.name();
+ 357 
+ 358             strcpy(buffer, myChild.name());
+ 359 
+ 360        //   printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
+ 361             Serial.println(" BUG - before it ");
+ 362             printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(buffer);
+ 363             Serial.println(" BUG - after it ");
+#endif // NEVER_DEFINED
+
 // -----------------------------------------------------------
 // -----------------------------------------------------------
 // -------------------   bug   -------------------------------
