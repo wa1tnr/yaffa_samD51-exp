@@ -187,53 +187,52 @@ const char* workingDirname = SPI_FlashROM_TOPDIR;
 
 /*
 void setup_qspiFlashROM(void) { // void setup_spi_flash(void) {
-//	Serial.print(" Hello from setup_qspi m4 getline stuff.   ");
 
-    if (!flash.begin()) { // if (!flash.begin(FLASH_TYPE)) {
-        Serial.println("E: could not find flash on QSPI bus.");
-        while(1);
-    }
-    Serial.print(" HAS_EXP_MFOUR_QSPI_FLASH "); Serial.println(HAS_EXP_MFOUR_QSPI_FLASH);
-    Serial.print(" HAS_QSPI_FLASH_DEMO "); Serial.println(HAS_QSPI_FLASH_DEMO);
-//  Serial.print(" FLASH_TYPE 0x"); Serial.println(FLASH_TYPE, HEX);
-    Serial.print(" Flash chip JEDEC ID: 0x"); Serial.println(flash.GetJEDECID(), HEX);
-//  Serial.println(" Found QSPI Flash.");
-    // Serial.print("Flash chip JEDEC ID: 0x");
-    // Serial.println(flash.GetJEDECID(), HEX);
-    // Serial.println(" want to see a message that says: Flash chip JEDEC ID: 0x1401501\r\n");
 
-    // pythonfs fatfs
-    flash.setFlashType(FLASH_TYPE); // new November 9 2018
-    if (!pythonfs.begin()) { //  if (!fatfs.begin()) {
-        Serial.println("Failed to mount filesystem!");
-        Serial.println("Was CircuitPython loaded on the board first to create the filesystem?");
-        // Serial.println(workingFilename);
-        while(1);
-    }
-    Serial.println("filesystem Mounted!");
-	Serial.print(" default workingDirname "); Serial.println(workingDirname);
-	Serial.print(" default workingFilename "); Serial.println(workingFilename);
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 */
 
 
 void setup_qspiFlashROM(void) {
     Serial.print("Hello from setup_qspi m4 getline stuff.   ");
-    Serial.print("VALID m4 getline ca1b-sesi-c1-e23  ");
+    Serial.print("VALID m4 getline ca3f-sesi-c3-f17  ");
 
     if (!flash.begin()) {
             Serial.println("E: could not find flash on QSPI bus.");
             while(1);
     }
     Serial.println("Found QSPI Flash.");
-    // Serial.println(flash.GetJEDECID(), HEX);
 
     if (!CURRENT_FILESYSTEM.begin(&flash)) {
             Serial.println("Failed to mount filesystem!");
             Serial.println("Was CircuitPython loaded on the board first to create the filesystem?");
             while(1);
     }
-    Serial.println("NOV 2018: Mounted filesystem!");
+    Serial.println("AUG 2019: Mounted filesystem!");
 }
 
 
@@ -260,7 +259,6 @@ extern void _load();
 extern void _remove();
 
 char* parseStr(void) {
-        // cruft // Serial.println("parseStr() itself: ");
 	_bl(); _word(); cell_t n = dStack_pop();
 	cell_t* cStr = (cell_t*) n;
 	char* str = 0;
@@ -269,16 +267,13 @@ char* parseStr(void) {
 	  	printStr("\r\n "), Serial.print(n), printStr("-byte \""), printStr(str), printStr("\"");
 	}
   	printStr(" ==> str "), printHex((cell_t) str);
-        // cruft // Serial.println("parseStr() returns str to the caller: ");
-        Serial.print("str is: ");
-        Serial.println(str);
+        // cruft // Serial.print("str is: "); // Serial.println(str);
 	return str;
 }
 
-
 char* fullPath(char* dirname){
         const char* pathLegend = "\r\n fullPath ";
-	char* path; // char* path;
+	char* path;
         char thisbuffer[BUFFR_SIZE];
         char thatbuffer[BUFFR_SIZE];
         char* buffer;
@@ -286,10 +281,6 @@ char* fullPath(char* dirname){
         buffer = thisbuffer;
         buffer_bb = thatbuffer; // not sure what's needed for separation and when. ;)
         strcpy(buffer, workingDirname);
-
-        // Serial.print("DEBUG: buffer now holds: '"); Serial.print(buffer);
-        // Serial.println("' in it.");
-
 	if(dirname == 0 || *dirname == 0) path = buffer;
 	else if(*dirname == '/') path = dirname;
 
@@ -305,14 +296,12 @@ char* fullPath(char* dirname){
   	printStr(buffer_bb);
         strcpy(buffer_bb, path);
   	printStr(buffer_bb);
-        // Serial.print("DEBUG: path is: '");
 	return path;
 }
 
 void _chdir(void){ // list filenames in given dir
 	char* path = fullPath( parseStr() );
 	if (!pythonfs.exists(path)) {
-
 		printStr("\r\n directory ");
 		printStr(path);
 		printStr(" not exist");
@@ -320,24 +309,13 @@ void _chdir(void){ // list filenames in given dir
 		return;
 	}
 	workingDirname = path;
-
 	printStr("\r\n working directory "); printStr(path);
-
 }
 
 // _dir() calls parseStr which prints " ==> str " and an address
 
 void _dir(void){ // list filenames in given dir
-
-	// Serial.print("\r\n DEBUG: _dir() entry point: ");
-        // result:  'dir' by itself prints the above DEBUG statement.
-
-	Serial.print("\r\n DEBUG: path assigned incl fullPath and parseStr(): ");
 	char* path = fullPath( parseStr() );
-
-        // - - - -   Nothing below gets executed - - -
-
-	Serial.print("\r\n DEBUG: a test to see if the path exists is performed: ");
 	if (!pythonfs.exists(path)) {
 		Serial.print("\r\n directory ");
 		Serial.print(path);
@@ -345,8 +323,6 @@ void _dir(void){ // list filenames in given dir
                 _throw("not exist");
 		return;
 	}
-	Serial.print("\r\n DEBUG: if the path didn't exist THIS message does not appear. ");
-
 	Serial.print("\r\n directory ");
 	Serial.print(path);
 	File testDir = pythonfs.open(path);
@@ -358,6 +334,12 @@ void _dir(void){ // list filenames in given dir
 	int i = 0;
 	while( child ) {
 
+// -----------------------------------------------------------
+// -----------------------------------------------------------
+// -----------------------------------------------------------
+// -------------------   bug   -------------------------------
+// -----------------------------------------------------------
+// -----------------------------------------------------------
 // does not want to compile as-is:
 //          printStr("\r\n "); Serial.print(++i); printStr(" "); printStr(child.name());
 
